@@ -1,0 +1,77 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/static/css/style.css">
+        <script src="/static/js/jquery.js"></script>
+        <script>
+            var question;
+            function getpoint() {
+                $.get('/api/total-score', {}, function(data, status, xhr){
+                    $('#total-score').text("Total Score : " +  data.data.total_score)
+                })
+            }
+
+            function useranswer(data) {
+                ans = document.getElementsByName("answer")[0].value;
+                document.getElementsByName("answer")[0].value = "";
+                $.post("/api/question/"+data.data.id+"/answer", {"answer": ans}, function(data, textstatus){
+                            console.log(data)
+                            if (data.data.status == "wrong"){
+                                alert("Your Answer is wrong")
+                            } else {
+                                alert("Your Answer is correct")
+                            }
+                            $("#close").click(function(){
+                                $("#dialog").dialog("close")
+                            })
+                        }).fail(
+                            function(data, status){
+                                console.log(data)
+                            }
+                        )
+            }
+
+            function ButtonClick() {
+                useranswer(question);
+                answers();
+                getpoint();
+            }
+
+            function answers(){
+                $.get('/api/question', {}, function(data, status, xhr){
+                    console.log(data.data)
+                    $("#question").text(data.data.question);
+                    question = data;
+                })
+            }
+            function checkLogin() {
+                $.get("/api/protected", {}, function(data, status, xhr){
+                    answers();
+                }).fail(function(data, status, xhr){
+                    console.log(data.status)
+                    if (data.status == 401){
+                        $(location).attr('href', "/login")
+                    }
+                })
+            }
+            $(document).ready(function(){
+                checkLogin()
+                getpoint()
+            })
+        </script>
+    </head>
+    <body>
+        <div class="container">
+            <div class="centered login">
+                <h1><p id="question"></p></h1>
+                <input name="answer">
+                <button onclick="ButtonClick()">answer</button>
+                <div class="row">
+                    <p id='total-score'></p>
+                </div>
+            </div>
+            
+        </div>
+
+    </body>
+</html>

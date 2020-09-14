@@ -1,0 +1,17 @@
+.centered {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+  }
+
+
+  .login {
+    background-color: aquamarine;
+    border: 1px greenyellow;
+    padding: 5%;
+  }
+
+
+  body {
+      background-color: honeydew;
+  }

@@ -1,0 +1,14 @@
+FROM golang:1.14-alpine as build-stage
+WORKDIR /go/src/app
+COPY . .
+RUN go build main.go
+
+
+FROM alpine
+COPY --from=build-stage /go/src/app/main .
+RUN mkdir assets
+RUN mkdir views
+COPY --from=build-stage /go/src/app/assets assets/.
+COPY --from=build-stage /go/src/app/views views/.
+EXPOSE 8080
+ENTRYPOINT [ "./main" ]

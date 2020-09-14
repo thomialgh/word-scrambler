@@ -1,0 +1,40 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/static/css/style.css">
+        <script src="/static/js/jquery.js"></script>
+        <script>
+            $(document).ready(function(){
+                $("button").click(function(){
+                    username = document.getElementsByName("username")[0].value;
+                    $.post("/api/login", 
+                    {
+                        username: username
+                    }, 
+                    function(data, status){
+                        if (data.status_code != 200) {
+                            alert(data.message)
+                        } else {
+                            $(location).attr('href', "/")
+                        }
+                    })
+                })
+            })
+        </script> 
+    </head> 
+    <body>
+        <div class="container">
+            <div class="centered login">
+                <p style="text-align: center;"><h1>WORD SCRAMBLER</h1></p>
+            <div style="text-align: center;">
+                <form style="text-align: center;">
+                    <p style="text-align: center;"><h5>Input Your name Here</h5></p>
+                    <input name="username">
+                </form>
+                <button>PLAY!</button>
+            </div>
+            
+            </div>
+        </div>
+    </body>
+</html>

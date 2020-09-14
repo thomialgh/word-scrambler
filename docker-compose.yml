@@ -1,0 +1,15 @@
+version: "3"
+services: 
+    mysql_img:
+        image: "mysql:5.7.31"
+        environment: 
+            MYSQL_DATABASE: word_scrambler
+            MYSQL_ROOT_PASSWORD: thomialghani
+    redis:
+        image: "redis:alpine"
+    web:
+        build:
+            context: .
+            dockerfile: DockerFile
+        ports: 
+            - "8080:8080"
